@@ -4,7 +4,7 @@
  * Performs a static analysis on the provided dart files
  *
  *     $ dart dartcritics.dart foo.dart
-  */
+ */
 library dartcritics;
 
 import 'dart:io';
@@ -21,7 +21,7 @@ void printUsage(ArgParser arguments) {
 
 void main() {
 
-  // the actual code logic
+  // application state
   final critics = new Critics();
   final arguments = new ArgParser();
 
@@ -30,14 +30,14 @@ void main() {
       help: 'sets the package directory',
       callback: (value) {
         if (value != null) {
-          critics.package = new Path.fromNative(value);
+          critics.package = value;
         }
       });
   arguments.addOption('lib',
       help: 'sets the library directory',
       callback: (value)  {
         if (value != null) {
-          critics.library = new Path.fromNative(value);
+          critics.library = value;
         }
       });
   arguments.addFlag('help', negatable: false,
@@ -58,8 +58,7 @@ void main() {
 
   // process each file individually
   for (var file in results.rest) {
-    var path = new Path.fromNative(file);
-    critics.process(path);
+    critics.process(file);
   }
 
 }

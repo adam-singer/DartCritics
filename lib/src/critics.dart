@@ -4,23 +4,26 @@ part of critics;
 
 class Critics {
 
-  Path library;
+  String library;
+  String package;
 
-  Path package;
-
-  void process(Path file) {
+  void process(String file) {
 
     // generate package and library path
+    var filePath = new Path(file);
     var libraryPath = library == null
-        ? file.directoryPath.append('/')
-        : package;
+        ? new Path('/Applications/Dart/dart-sdk/')
+        : new Path(library);
     var packagePath = package == null
-        ? file.directoryPath.append('packages/')
-        : package;
+        ? filePath.directoryPath.append('packages/')
+        : new Path(package);
 
-    Compilation compilation = new Compilation(file, libraryPath, packagePath);
-
-    print(compilation);
+    // compile the target file
+    Compilation compilation = new Compilation.library([filePath],
+        libraryPath, packagePath);
+    compilation.mirrors.libraries.forEach((k, v) {
+      print('$k: ${v.displayName}');
+    });
 
   }
 
