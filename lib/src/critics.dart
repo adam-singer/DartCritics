@@ -4,27 +4,42 @@ part of critics;
 
 class Critics {
 
-  String library;
-  String package;
+  Path _library;
 
-  void process(String file) {
+  set library(Path path) => _library = path;
 
-    // generate package and library path
-    var filePath = new Path(file);
-    var libraryPath = library == null
-        ? new Path('/Applications/Dart/dart-sdk/')
-        : new Path(library);
-    var packagePath = package == null
-        ? filePath.directoryPath.append('packages/')
-        : new Path(package);
+  Path get library {
+    if (_library != null) {
+      return _library;
+    } else if (Platform.environment.containsKey('DART_SDK')) {
+      return new Path(Platform.environment['DART_SDK']);
+    } else {
+      // TODO(renggli): figure out something better
+      return new Path('/Applications/Dart/dart-sdk/');
+    }
+  }
 
-    // compile the target file
-    Compilation compilation = new Compilation.library([filePath],
-        libraryPath, packagePath);
-    compilation.mirrors.libraries.forEach((k, v) {
-      print('$k: ${v.displayName}');
+  Path _package;
+
+  set package(Path path) => _package = path;
+
+  Path get package {
+    if (_package != null) {
+      return _package;
+    } else {
+      return entrypoints.first.directoryPath.append('packages/');
+    }
+  }
+
+  List<Path> entrypoints = [];
+
+  void process() {
+    Compilation compilation = new Compilation.library(entrypoints,
+        library, package);
+    var libraries = compilation.mirrors.libraries.values.filter((library) {
+      return !library.uri.toString().startsWith('dart:');
     });
-
+    // TODO(renggli): do the actual critics on the libraries
   }
 
 }

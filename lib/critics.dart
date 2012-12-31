@@ -4,6 +4,7 @@ library critics;
 
 import 'dart:io';
 
+import 'package:compiler_unsupported/libraries.dart';
 import 'package:compiler_unsupported/implementation/mirrors/mirrors.dart';
 
 part 'src/critics.dart';

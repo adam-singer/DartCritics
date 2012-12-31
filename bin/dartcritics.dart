@@ -30,14 +30,14 @@ void main() {
       help: 'sets the package directory',
       callback: (value) {
         if (value != null) {
-          critics.package = value;
+          critics.package = new Path(value);
         }
       });
   arguments.addOption('lib',
       help: 'sets the library directory',
       callback: (value)  {
         if (value != null) {
-          critics.library = value;
+          critics.library = new Path(value);
         }
       });
   arguments.addFlag('help', negatable: false,
@@ -48,17 +48,11 @@ void main() {
         }
       });
 
-  // parse the supported arguments
+  // process the supported arguments
   final results = arguments.parse(new Options().arguments);
+  critics.entrypoints = results.rest.map((each) => new Path(each));
 
-  // test if we have file to process
-  if (results.rest.isEmpty) {
-    printUsage(arguments);
-  }
-
-  // process each file individually
-  for (var file in results.rest) {
-    critics.process(file);
-  }
+  // call the critics compiler
+  critics.process();
 
 }
