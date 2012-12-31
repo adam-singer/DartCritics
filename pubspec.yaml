@@ -1,0 +1,9 @@
+name: dartcritics
+version: 0.1.0
+description: Static code analysis tool for Dart.
+author: Lukas Renggli <renggli@gmail.com>
+homepage: https://github.com/renggli/DartCritics
+dependencies:
+  args: any
+  compiler_unsupported: any
+  unittest: any
